@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  microservice:
+    image: payara/micro:5.2021.8-jdk11
+    container_name: microservice
+    ports:
+      - "8080:8080" # HTTP listener
+      - "9009:9009" # Java debugger
+    volumes:
+      - "./build/libs:/opt/payara/deployments"
+    networks:
+      - web
+networks:
+  web:
