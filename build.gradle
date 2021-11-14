@@ -3,7 +3,6 @@ plugins {
     id 'war'
 }
 
-group = 'at.dhyan.jakarta'
 version '1.0.0'
 
 repositories {

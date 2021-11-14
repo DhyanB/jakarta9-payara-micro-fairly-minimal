@@ -1,19 +1,14 @@
-# About this project
+### About this project
 
-This is a fairly minimal example of a Jakarta EE 9 microservice running on Payara Micro.
+A fairly minimal Jakarta EE 9 microservice running on Payara Micro.
 
-Fairly minimal means that the MicroProfile, Lombok, SLF4J logging and some boilerplate are already
-included for convenience.
+Fairly minimal in that the MicroProfile, Lombok, SLF4J and some boilerplate are already included.
 
-# Requirements
+### Requirements
 
-- Linux-like shell
-- Make
-- JDK 11
-- Gradle
-- Docker & Docker Compose
+Shell + make + jdk11 + gradle + docker + docker-compose
 
-# Building and running
+### Building and running
 
     sudo make cb         # Clean up and build the WAR file
     sudo make up         # Start container
