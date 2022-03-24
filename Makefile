@@ -2,8 +2,12 @@ APP_NAME=microservice
 CONTAINER_NAME=${APP_NAME}
 
 ifeq ($(OS),Windows_NT)
+    DOCKER_CMD=docker
+    DOCKER_COMPOSE_CMD=sudo docker-compose
     GRADLE_CMD=gradlew
 else
+    DOCKER_CMD=sudo docker
+    DOCKER_COMPOSE_CMD=sudo docker-compose
     GRADLE_CMD=./gradlew
 endif
 
@@ -19,6 +23,7 @@ help:
 	@echo "    cbt            Clean, build and test."
 	@echo "    up             Build images and start containers."
 	@echo "    down           Stop and remove containers."
+	@echo "    run            Down, up, logs in a single command."
 	@echo "    logs           Observe application logs."
 	@echo "    status         Show the applications container status and mounted volumes."
 	@echo "    shell          Get a shell in the application container."
@@ -39,23 +44,26 @@ cbt:
 	$(GRADLE_CMD) clean build
 
 up:
-	docker-compose up --build --detach
+	$(DOCKER_COMPOSE_CMD) up --build --detach
 
 down:
-	docker-compose down
+	$(DOCKER_COMPOSE_CMD) down
+
+run:
+	make down && make up && make logs
 
 logs:
-	@docker logs --follow $(CONTAINER_NAME)
+	@$(DOCKER_CMD) logs --follow $(CONTAINER_NAME)
 
 status:
-	@docker container ls --filter=name=$(CONTAINER_NAME) --format "table {{.Status}}\t{{.Ports}}\t{{.Mounts}}" --no-trunc
+	@$(DOCKER_CMD) container ls --filter=name=$(CONTAINER_NAME) --format "table {{.Status}}\t{{.Ports}}\t{{.Mounts}}" --no-trunc
 
 shell:
-	docker exec -it $(CONTAINER_NAME) sh
+	$(DOCKER_CMD) exec -it $(CONTAINER_NAME) sh
 
 restart:
-	docker restart $(CONTAINER_NAME)
+	$(DOCKER_CMD) restart $(CONTAINER_NAME)
 
 cycle:
 	$(GRADLE_CMD) build -x test
-	docker restart $(CONTAINER_NAME)
+	$(DOCKER_CMD) restart $(CONTAINER_NAME)
